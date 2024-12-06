@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Courses</title>
+  <link rel="stylesheet" href="static/css/homecss.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">MyWebsite</div>
+      <div class="menu">
+        <div class="dropdown">
+          <form action="/explore" method="POST" id="explore-form">
+            <input type="text" name="query" placeholder="What do you want to learn?" required>
+            <button type="submit" class="explore-btn">Explore</button>
+          </form>
+          <div class="dropdown-menu">
+            <!-- Dropdown menu content here -->
+          </div>
+        </div>
+      </div>
+      <div class="user-options">
+        <span>English ▼</span>
+        <i class="notification-icon">🔔</i>
+        <div class="profile-circle">H</div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="recommended-courses">
+      <h2>Recommended Courses</h2>
+      <p>Explore the courses recommended for you based on your interests.</p>
+      <div class="course-grid">
+        {% if courses %}
+          {% for course in courses %}
+            <div class="course-card">
+            <div>
+              <a href="{{ course.url }}" target="_blank">
+                <img src="default-image.jpg" alt="{{ course.name }}">
+                <h3>{{ course.name }}</h3>
+                <p>{{ course.description }}</p>
+              </a>
+            </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No courses found based on your query. Please try again.</p>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 MyWebsite. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

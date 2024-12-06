@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Example</title>
+  <link rel="stylesheet" href="static\css\homecss.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">MyWebsite</div>
+      <div class="menu">
+        <div class="dropdown">
+            <form action="/explore" method="POST" id="explore-form">
+            <input type="text" name="query" placeholder="What do you want to learn?" required>
+            <button type="submit" class="explore-btn">Explore</button>
+          </form>
+            <div class="dropdown-menu">
+              <div class="dropdown-item">
+                <a href="#">Business</a>
+                <div class="course-submenu">
+                  <a href="#">Leadership</a>
+                  <a href="#">Marketing</a>
+                  <a href="#">Finance</a>
+                  <a href="#">Entrepreneurship</a>
+                </div>
+              </div>
+              <div class="dropdown-item">
+                <a href="#">Technology</a>
+                <div class="course-submenu">
+                  <a href="#">Programming</a>
+                  <a href="#">Data Science</a>
+                  <a href="#">AI & ML</a>
+                  <a href="#">Cloud Computing</a>
+                </div>
+              </div>
+              <div class="dropdown-item">
+                <a href="#">Health</a>
+                <div class="course-submenu">
+                  <a href="#">Nutrition</a>
+                  <a href="#">Mental Health</a>
+                  <a href="#">Fitness</a>
+                  <a href="#">Healthcare Management</a>
+                </div>
+              </div>
+              <div class="dropdown-item">
+                <a href="#">Design</a>
+                <div class="course-submenu">
+                  <a href="#">Graphic Design</a>
+                  <a href="#">UI/UX</a>
+                  <a href="#">Interior Design</a>
+                  <a href="#">Fashion Design</a>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="user-options">
+        <span>English ▼</span>
+        <i class="notification-icon">🔔</i>
+        <div class="profile-circle">H</div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="banner">
+      <div class="banner-content">
+        <h1>Black Friday Sale</h1>
+        <p>Save big on learning with special deals starting at $199.</p>
+      </div>
+    </section>
+
+    <section class="popular-courses">
+      <h2>Most Popular Certificates</h2>
+      <p>Explore our most popular programs and get job-ready for in-demand careers.</p>
+      <div class="course-grid">
+        <div class="course-card">
+          <img src="google-data-analytics.jpg" alt="Google Data Analytics">
+          <h3>Google Data Analytics</h3>
+          <p>Professional Certificate</p>
+        </div>
+        <div class="course-card">
+          <img src="google-project-management.jpg" alt="Google Project Management">
+          <h3>Google Project Management</h3>
+          <p>Professional Certificate</p>
+        </div>
+        <div class="course-card">
+          <img src="google-it-support.jpg" alt="Google IT Support">
+          <h3>Google IT Support</h3>
+          <p>Professional Certificate</p>
+        </div>
+        <div class="course-card">
+          <img src="google-ux-design.jpg" alt="Google UX Design">
+          <h3>Google UX Design</h3>
+          <p>Professional Certificate</p>
+        </div>
+      </div>
+      <button class="view-more-btn">Show 8 more</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 MyWebsite. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
