@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for,request, jsonify, session,redirect
+from flask import Flask, render_template, url_for,request, jsonify, session,redirect, flash
 from pymongo import MongoClient
 import sys
 import os
@@ -15,16 +15,17 @@ data = recommendation.pre_processing(df)
 data['tags'] = data['tags'].apply(recommendation.stem)
 uri = "mongodb+srv://tnchau23823:abc13579@cluster0.fs6jd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri)
-# app.static_folder = "web\static"
+
 app.secret_key = 'key'  # Required for session management
 db = client['my_database']
 db_courses = db['db_courses']
-accounts = db['accounts']
+accounts = db['account']
 @app.route('/')
 def home():
     return render_template("home.html")
 
-@app.route('/login', methods = ["POST","GET"])
+
+@app.route('/login', methods = ['POST','GET'])
 def login():
     if request.method == 'POST':
         username = request.form["username"]
@@ -33,10 +34,17 @@ def login():
         user = accounts.find_one({'username': username, 'password': password})
         if user:
             session['username'] = username
-            return redirect('/')
+            flash('Đăng nhập thành công!', 'success')
+            return render_template("home.html")
         else:
             return render_template('login.html',message='Tên đăng nhập hoặc mật khẩu không đúng')
     return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)  # Xóa session khi logout
+    return render_template('login.html',message='Bạn đã đăng xuất thành công')
 
 
 @app.route('/handle_click', methods=['POST'])

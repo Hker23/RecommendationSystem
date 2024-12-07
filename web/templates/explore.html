@@ -22,10 +22,14 @@
         </div>
       </div>
       <div class="user-options">
-        <!-- <span id="language-dropdown">English ▼</span>
-        <i id="notification-icon" class="notification-icon">🔔</i> -->
         <div id="profile-circle" class="profile-circle">H</div>
-    </div>
+        <div id="dropdown-menu" class="dropdown-menu">
+          <ul>
+            <li><a id="login" href="/login">Đăng nhập</a></li>
+            <li><a id="logout" href="/logout">Đăng xuất</a></li>
+          </ul>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -57,27 +61,7 @@
     <p>&copy; 2024 MyWebsite. All rights reserved.</p>
   </footer>
 
-  <script>
-    // Hàm gửi yêu cầu tới Flask
-    function sendClickEvent(clickedItem) {
-        fetch('/handle_click', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ clicked_item: clickedItem })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message); // Hiển thị thông báo từ server
-        })
-        .catch(error => console.error('Error:', error));
-    }
 
-    // Lắng nghe sự kiện nhấn
-    document.getElementById('language-dropdown').addEventListener('click', () => sendClickEvent('language'));
-    document.getElementById('notification-icon').addEventListener('click', () => sendClickEvent('notification'));
-    document.getElementById('profile-circle').addEventListener('click', () => sendClickEvent('profile'));
-</script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>

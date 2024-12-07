@@ -34,7 +34,7 @@ body::before {
   border-radius: 15px;
   padding: 40px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(240, 13, 13, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
