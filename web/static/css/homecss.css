@@ -1,120 +1,117 @@
-
-
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  header {
-    background-color: #0046be;
-    color: white;
-    padding: 1rem;
-  }
-  
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .menu input {
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-  }
-  
-  .menu .explore-btn {
-    background-color: white;
-    color: #0046be;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-  }
-  
-  .user-options {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .profile-circle {
-    background-color: #fff;
-    color: #0046be;
-    border-radius: 50%;
-    padding: 0.5rem;
-    text-align: center;
-    width: 2rem;
-    height: 2rem;
-  }
-  
-  /* Banner Section */
-  .banner {
-    background-color: #f9f9f9;
-    text-align: center;
-    padding: 2rem 1rem;
-  }
-  
-  .banner-content h1 {
-    font-size: 2rem;
-    margin: 0;
-  }
-  
-  .banner-content p {
-    font-size: 1.2rem;
-  }
-  
-  /* Popular Courses Section */
-  .popular-courses {
-    padding: 2rem 1rem;
-  }
-  
-  .popular-courses h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .course-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-  
-  .course-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-align: center;
-    padding: 1rem;
-  }
-  
-  .course-card img {
-    max-width: 100%;
-    border-radius: 5px;
-  }
-  
-  .view-more-btn {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #0046be;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 1rem 0;
-  }
-  
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
+header {
+  background-color: #0046be;
+  color: white;
+  padding: 1rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu input {
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.menu .explore-btn {
+  background-color: white;
+  color: #0046be;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.user-options {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-circle {
+  background-color: #fff;
+  color: #0046be;
+  border-radius: 50%;
+  padding: 0.5rem;
+  text-align: center;
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Banner Section */
+.banner {
+  background-color: #f9f9f9;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.banner-content h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.banner-content p {
+  font-size: 1.2rem;
+}
+
+/* Popular Courses Section */
+.popular-courses {
+  padding: 2rem 1rem;
+}
+
+.popular-courses h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.course-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  padding: 1rem;
+}
+
+.course-card img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.view-more-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #0046be;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* Dropdown Styles */
 .dropdown {
   position: relative;
   display: inline-block;
 }
-
 
 .dropdown-menu {
   display: none;
@@ -140,84 +137,121 @@ body {
   background-color: #f1f1f1;
 }
 
-
+/* Hover effect */
 .dropdown:hover .dropdown-menu {
-    display: block;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 500;
-    transition: opacity 0.3s ease;
-  }
-  
-  .dropdown:hover ~ body::before {
-    opacity: 1;
-    pointer-events: all;
-  }
-  
+  display: block;
+}
 
-  .dropdown {
-    position: relative;
-    display: inline-block;
-    z-index: 1000;
-  }
-  
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-    z-index: 1000;
-    padding: 0.5rem 0;
-    border-radius: 5px;
-  }
-  
-  .dropdown:hover .dropdown-menu {
-    display: block;
-  }
-  
+/* Submenu Styles */
+.dropdown-item {
+  position: relative;
+}
 
-  .dropdown-item {
-    position: relative;
-  }
-  
-  .dropdown-item:hover > .course-submenu {
-    display: block;
-  }
-  
+.dropdown-item:hover > .course-submenu {
+  display: block;
+}
 
-  .course-submenu {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-    z-index: 1000;
-    padding: 0.5rem 0;
-    border-radius: 5px;
-  }
-  
-  .course-submenu a {
-    display: block;
-    color: #333;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s;
-  }
-  
-  .course-submenu a:hover {
-    background-color: #f1f1f1;
-  }
+.course-submenu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 1000;
+  padding: 0.5rem 0;
+  border-radius: 5px;
+}
+
+.course-submenu a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s;
+}
+
+.course-submenu a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Profile and Notification Icon */
+.notification-icon, .profile-circle, span {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-options {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-circle {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Dropdown Menu for Profile */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: rgb(245, 239, 239);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-menu li:hover {
+  background-color: #0a0a0a;
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none;
+}
+
+/* Body Background Overlay for Dropdown */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 500;
+  transition: opacity 0.3s ease;
+}
+
+.dropdown:hover ~ body::before {
+  opacity: 1;
+  pointer-events: all;
+}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for,request
+from flask import Flask, render_template, url_for,request, jsonify, session,redirect
 from pymongo import MongoClient
 import sys
 import os
@@ -15,13 +15,43 @@ data = recommendation.pre_processing(df)
 data['tags'] = data['tags'].apply(recommendation.stem)
 uri = "mongodb+srv://tnchau23823:abc13579@cluster0.fs6jd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri)
+# app.static_folder = "web\static"
 app.secret_key = 'key'  # Required for session management
 db = client['my_database']
 db_courses = db['db_courses']
-
+accounts = db['accounts']
 @app.route('/')
 def home():
     return render_template("home.html")
+
+@app.route('/login', methods = ["POST","GET"])
+def login():
+    if request.method == 'POST':
+        username = request.form["username"]
+        password = request.form["password"]
+        
+        user = accounts.find_one({'username': username, 'password': password})
+        if user:
+            session['username'] = username
+            return redirect('/')
+        else:
+            return render_template('login.html',message='Tên đăng nhập hoặc mật khẩu không đúng')
+    return render_template('login.html')
+
+
+@app.route('/handle_click', methods=['POST'])
+def handle_click():
+    clicked_item = request.json.get('clicked_item')
+    if not clicked_item:
+        return jsonify({'message': 'No action provided'}), 400  # Trả về lỗi nếu không nhận được dữ liệu
+
+    if clicked_item == 'profile':
+        response = "Profile icon clicked!"
+    else:
+        response = "Unknown action."
+
+    return jsonify({'message': response})
+
 
 @app.route('/explore', methods=['POST'])
 def explore():

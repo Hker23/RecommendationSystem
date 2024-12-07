@@ -1,65 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Website Example</title>
   <link rel="stylesheet" href="static\css\homecss.css">
 </head>
+
 <body>
   <header>
     <nav class="navbar">
       <div class="logo">MyWebsite</div>
       <div class="menu">
         <div class="dropdown">
-            <form action="/explore" method="POST" id="explore-form">
+          <form action="/explore" method="POST" id="explore-form">
             <input type="text" name="query" placeholder="What do you want to learn?" required>
             <button type="submit" class="explore-btn">Explore</button>
           </form>
-            <div class="dropdown-menu">
-              <div class="dropdown-item">
-                <a href="#">Business</a>
-                <div class="course-submenu">
-                  <a href="#">Leadership</a>
-                  <a href="#">Marketing</a>
-                  <a href="#">Finance</a>
-                  <a href="#">Entrepreneurship</a>
-                </div>
+          <div class="dropdown-menu">
+            <div class="dropdown-item">
+              <a href="#">Business</a>
+              <div class="course-submenu">
+                <a href="#">Leadership</a>
+                <a href="#">Marketing</a>
+                <a href="#">Finance</a>
+                <a href="#">Entrepreneurship</a>
               </div>
-              <div class="dropdown-item">
-                <a href="#">Technology</a>
-                <div class="course-submenu">
-                  <a href="#">Programming</a>
-                  <a href="#">Data Science</a>
-                  <a href="#">AI & ML</a>
-                  <a href="#">Cloud Computing</a>
-                </div>
+            </div>
+            <div class="dropdown-item">
+              <a href="#">Technology</a>
+              <div class="course-submenu">
+                <a href="#">Programming</a>
+                <a href="#">Data Science</a>
+                <a href="#">AI & ML</a>
+                <a href="#">Cloud Computing</a>
               </div>
-              <div class="dropdown-item">
-                <a href="#">Health</a>
-                <div class="course-submenu">
-                  <a href="#">Nutrition</a>
-                  <a href="#">Mental Health</a>
-                  <a href="#">Fitness</a>
-                  <a href="#">Healthcare Management</a>
-                </div>
+            </div>
+            <div class="dropdown-item">
+              <a href="#">Health</a>
+              <div class="course-submenu">
+                <a href="#">Nutrition</a>
+                <a href="#">Mental Health</a>
+                <a href="#">Fitness</a>
+                <a href="#">Healthcare Management</a>
               </div>
-              <div class="dropdown-item">
-                <a href="#">Design</a>
-                <div class="course-submenu">
-                  <a href="#">Graphic Design</a>
-                  <a href="#">UI/UX</a>
-                  <a href="#">Interior Design</a>
-                  <a href="#">Fashion Design</a>
-                </div>
+            </div>
+            <div class="dropdown-item">
+              <a href="#">Design</a>
+              <div class="course-submenu">
+                <a href="#">Graphic Design</a>
+                <a href="#">UI/UX</a>
+                <a href="#">Interior Design</a>
+                <a href="#">Fashion Design</a>
               </div>
             </div>
           </div>
+        </div>
       </div>
       <div class="user-options">
-        <span>English ▼</span>
-        <i class="notification-icon">🔔</i>
-        <div class="profile-circle">H</div>
+        <!-- <span id="language-dropdown">English ▼</span>
+        <i id="notification-icon" class="notification-icon">🔔</i> -->
+        <div id="profile-circle" class="profile-circle">H</div>
+        <div id="dropdown-menu" class="dropdown-menu">
+          <ul>
+            <li id="login">Đăng nhập</li>
+            <li id="logout">Đăng xuất</li>
+          </ul>
+        </div>
       </div>
     </nav>
   </header>
@@ -104,7 +112,8 @@
   <footer>
     <p>&copy; 2024 MyWebsite. All rights reserved.</p>
   </footer>
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 
-  <script src="script.js"></script>
 </body>
+
 </html>
