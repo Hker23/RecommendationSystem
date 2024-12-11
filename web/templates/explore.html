@@ -42,7 +42,9 @@
           {% for course in courses %}
             <div class="course-card">
             <div>
-              <a href="{{ course.url }}" target="_blank">
+              <a href="{{ course.url }}" 
+                target="_blank" >
+                 <!-- onclick="logCourseClick('{{ course.course_id }}', '{{ course.url }}')" > -->
                 <img src="static/image/1.png" alt="{{ course.name }}">
                 <h3>{{ course.name }}</h3>
                 <p>{{ course.description }}</p>
