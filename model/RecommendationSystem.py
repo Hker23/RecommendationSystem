@@ -3,6 +3,12 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem.porter import PorterStemmer
+from pymongo import MongoClient
+uri = "mongodb+srv://tnchau23823:abc13579@cluster0.fs6jd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+client = MongoClient(uri)
+db = client['my_database']
+db_courses = db['db_courses']
+
 
 class Recommendation:
     def __init__(self):
@@ -118,6 +124,52 @@ class Recommendation:
         return recommendations
 
 
+    def score_wordbase_view(self, course_id, data):
+        # Tìm khóa học trong cơ sở dữ liệu
+        document = db_courses.find_one({'Course ID': course_id})
+        if not document:
+            raise ValueError(f"Course with ID {course_id} not found")
+
+        # Mô tả khóa học cần so sánh
+        course_description = document["Course Description"]
+
+        # Tất cả mô tả khóa học
+        course_descriptions = data['Course Description'].str.lower()
+
+        #Vectorizer
+        cv = CountVectorizer(max_features=5000, stop_words='english')
+        vectors = cv.fit_transform(course_descriptions)
+
+        # Tính vector cho khóa học cần so sánh
+        query_vector = cv.transform([course_description])
+
+        # Tính tương đồng cosine
+        similarity_scores = cosine_similarity(query_vector, vectors)
+
+        # Trả về điểm tương đồng
+        return similarity_scores.flatten()
+
+
+    def score_wordbase_search(self, query, data):
+        # Tất cả mô tả khóa học
+        course_descriptions = data['Course Description'].str.lower()
+        #Vectorizer
+        cv = CountVectorizer(max_features=5000, stop_words='english')
+        all_texts = [query] + course_descriptions
+        vectors = cv.fit_transform(all_texts)
+         # Vector của query
+        query_vector = vectors[0]
+        
+        # Vectors của các mô tả khóa học
+        course_vectors = vectors[1:]
+        
+        # Tính toán tương đồng cosine
+        similarities = cosine_similarity(query_vector, course_vectors)
+        
+        # Trả về danh sách điểm tương đồng
+        return similarities.flatten()
+    
+    
     def recommend_with_rating(self, courses, data, number_course_recommend=6, rating_weight=0.5):
         """
         Đề xuất khóa học dựa trên cột 'rating' và 'cosine_similarity'.
