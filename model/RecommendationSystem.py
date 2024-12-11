@@ -10,6 +10,7 @@ class Recommendation:
     def history_data(self, username, number_courses, data):
         """
         Tạo danh sách ngẫu nhiên các khóa học từ dữ liệu đầu vào.
+        FIX
         """
         if 'course_name' not in data.columns:
             raise ValueError("Dữ liệu đầu vào thiếu cột 'course_name'.")
@@ -35,7 +36,7 @@ class Recommendation:
 
         # Làm sạch dữ liệu
         data_clean = self.clean_columns(data, ['Course Name', 'Course Description', 'Skills'])
-        
+
         # Kết hợp các cột tạo thành `tags`
         data_clean['tags'] = (
             data_clean['Course Name'] + " " +
@@ -46,7 +47,7 @@ class Recommendation:
 
         # Lựa chọn các cột cần thiết
         new_data = data_clean[['Course Name', 'tags']].rename(columns={'Course Name': 'course_name'})
-        
+
         # Giữ dấu cách giữa các từ trong `course_name`
         new_data['course_name'] = new_data['course_name'].str.strip()
 
@@ -56,27 +57,27 @@ class Recommendation:
         y=[]
         for i in text.split():
             y.append(ps.stem(i))
-        
+
         return " ".join(y)
-    
+
     def similarity_measure(self, data):
         """
         Tính toán ma trận tương đồng cosine từ dữ liệu.
         """
         cv = CountVectorizer(max_features=5000, stop_words='english')
         vectors = cv.fit_transform(data['tags']).toarray()
-        
+
         return cosine_similarity(vectors)
 
-    def recommend(self, user_input, data, number_course_recommend=6):
+    def user_search(self, user_input, data, number_course_recommend=6):
         """
         Gợi ý các khóa học dựa trên input từ người dùng và dữ liệu khóa học.
-        
+
         Parameters:
             user_input (str): Từ khóa hoặc chủ đề mà người dùng nhập vào.
             data (pd.DataFrame): Dataset chứa thông tin các khóa học. Phải có cột `tags` và `course_name`.
             number_course_recommend (int): Số lượng khóa học muốn gợi ý (mặc định là 6).
-        
+
         Returns:
             list: Danh sách từ điển chứa tên, mô tả, URL khóa học.
         """
@@ -90,21 +91,21 @@ class Recommendation:
 
         # Thêm input từ người dùng vào dataset để tính toán
         data = pd.concat([data, pd.DataFrame({'tags': [user_input.lower()], 'course_name': ['User Input']})], ignore_index=True)
-        
+
         # Vector hóa văn bản
         cv = CountVectorizer(max_features=5000, stop_words='english')
         vectors = cv.fit_transform(data['tags']).toarray()
         
         # Tính độ tương đồng cosine
         similarity = cosine_similarity(vectors)
-        
+
         # Lấy chỉ số của user input
         user_index = data[data['course_name'] == 'User Input'].index[0]
-        
+
         # Lấy danh sách các khóa học tương tự
         distances = similarity[user_index]
         recommended_indices = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:number_course_recommend + 1]
-        
+
         # Trả về thông tin khóa học được gợi ý
         recommendations = []
         for idx, _ in recommended_indices:
@@ -114,7 +115,7 @@ class Recommendation:
                 # 'description': course.get('description', 'No description available'),
                 # 'url': course.get('url', '#')  # URL khóa học (nếu có)
             # })
-        
+
         return recommendations
 
 
@@ -170,5 +171,3 @@ class Recommendation:
         ][:number_course_recommend]
 
         return recommended_courses
-
-

@@ -7,7 +7,6 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from model.RecommendationSystem import Recommendation
 import pandas as pd
-
 app = Flask(__name__)
 recommendation = Recommendation()
 df = pd.read_csv("model\Coursera.csv")
@@ -37,14 +36,14 @@ def login():
             flash('Đăng nhập thành công!', 'success')
             return render_template("home.html")
         else:
-            return render_template('login.html',message='Tên đăng nhập hoặc mật khẩu không đúng')
+            return render_template('login.html',message='Invalid username or password')
     return render_template('login.html')
 
 
 @app.route('/logout')
 def logout():
     session.pop('user', None)  # Xóa session khi logout
-    return render_template('login.html',message='Bạn đã đăng xuất thành công')
+    return render_template('login.html',message='Log out successfully')
 
 
 @app.route('/handle_click', methods=['POST'])
@@ -63,9 +62,8 @@ def handle_click():
 
 @app.route('/explore', methods=['POST'])
 def explore():
-    # Lấy giá trị từ ô nhập liệu
     user_input = request.form.get('query')
-    recommendations = recommendation.recommend(user_input, data)
+    recommendations = recommendation.user_search(user_input, data)
     course_list = []
     for course_name in recommendations:
         # Tìm khóa học trong MongoDB theo tên
