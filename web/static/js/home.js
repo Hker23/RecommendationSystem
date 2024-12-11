@@ -54,48 +54,48 @@ document.addEventListener('DOMContentLoaded', () => {
             dropdownMenu.style.display = 'none';
         }
     });
-    const courseLinks = document.querySelectorAll('.course-card a');
+    // const courseLinks = document.querySelectorAll('.course-card a');
 
-    courseLinks.forEach(link => {
-        const courseId = link.getAttribute('data-course-id');
-        const courseUrl = link.getAttribute('href');
+    // courseLinks.forEach(link => {
+    //     const courseId = link.getAttribute('data-course-id');
+    //     const courseUrl = link.getAttribute('href');
 
-        link.addEventListener('click', (event) => {
-            event.preventDefault(); // Ngăn điều hướng mặc định
-            logCourseClick(courseId, courseUrl);
-        });
-    });
+    //     link.addEventListener('click', (event) => {
+    //         event.preventDefault(); // Ngăn điều hướng mặc định
+    //         logCourseClick(courseId, courseUrl);
+    //     });
+    // });
 
     // Hàm log khi nhấn vào khóa học
 
-    window.logCourseClick = function (course_id, course_url) {
-        const username = "{{ session.get('username', '') }}";
-        if (!username) {
-            console.log("User not logged in. Skipping save to MongoDB.");
-            window.open(course_url, "_blank");
-            return;
-        }
+//     window.logCourseClick = function (course_id, course_url) {
+//         const username = "{{ session.get('username', '') }}";
+//         if (!username) {
+//             console.log("User not logged in. Skipping save to MongoDB.");
+//             window.open(course_url, "_blank");
+//             return;
+//         }
 
-        const payload = {
-            course_id: course_id,
-            username: username,
-            time: new Date().toISOString()
-        };
+//         const payload = {
+//             course_id: course_id,
+//             username: username,
+//             time: new Date().toISOString()
+//         };
 
-        fetch('/log_course_click', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        })
-            .then(response => {
-                console.log("Course click logged successfully.");
-                window.open(course_url, "_blank");
-            })
-            .catch(error => {
-                console.error('Error logging course click:', error);
-                window.open(course_url, "_blank");
-            });
-    }
-});
+//         fetch('/log_course_click', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(payload)
+//         })
+//             .then(response => {
+//                 console.log("Course click logged successfully.");
+//                 window.open(course_url, "_blank");
+//             })
+//             .catch(error => {
+//                 console.error('Error logging course click:', error);
+//                 window.open(course_url, "_blank");
+//             });
+//     }
+// });
