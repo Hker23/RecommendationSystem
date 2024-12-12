@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 #     {"id": 2, "name": "Data Science", "description": "Introduction to data analysis and machine learning."},
 #     {"id": 3, "name": "Web Development", "description": "Build modern websites with HTML, CSS, and JavaScript."},
 # ]
-courses = pd.read_csv("Coursera.csv")
+courses = pd.read_csv("model\\Coursera.csv")
 
 # Hàm để tính score dựa trên description
 def calculate_description_score(query, descriptions):
@@ -56,11 +56,14 @@ def recommend_courses(query, courses, description_weight=0.3, query_weight=0.7, 
     return [course for course, score in recommended_courses]
 
 # Ví dụ sử dụng
-user_query = "Learn programming and data analysis"
-recommended = recommend_courses(user_query, courses)
+# user_query = "Learn programming and data analysis"
+# recommended = recommend_courses(user_query, courses)
 
-print("Recommended Courses:")
-print(recommended)
+temp = set()
+courses.drop_duplicates(subset='Course URL', inplace=True)
+courses.to_csv("model\\clean.csv", index=False)
+# print("Recommended Courses:")
+# print(recommended)
     # print(f"- {course['Course Name']}: {course['Course Description']}")
 
 # Read csv

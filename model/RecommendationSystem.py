@@ -5,27 +5,19 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem.porter import PorterStemmer
 
 class Recommendation:
-    def __init__(self):
-        pass
-    def history_data(self, username, number_courses, data):
-        """
-        Tạo danh sách ngẫu nhiên các khóa học từ dữ liệu đầu vào.
-        FIX
-        """
-        if 'course_name' not in data.columns:
-            raise ValueError("Dữ liệu đầu vào thiếu cột 'course_name'.")
-        return data['course_name'].sample(n=number_courses, random_state=42)
+    def __init__(self, data: dict):
+        self.data = self._preprocess_data(data)
 
-    def clean_columns(self, data, columns):
+    def _clean_columns(self, data, columns):
         """
         Làm sạch các cột chỉ định trong DataFrame, thay thế ký tự không mong muốn.
         """
         for column in columns:
             if column in data.columns:
-                data[column] = data[column].str.replace(r"[,:_()]", "", regex=True)
+                self.data[column] = self.data[column].str.replace(r"[,:_()]", "", regex=True)
         return data
 
-    def pre_processing(self, data):
+    def _preprocess_data(self, data):
         """
         Tiền xử lý dữ liệu: Làm sạch và tạo cột `tags` kết hợp thông tin cần thiết.
         """
@@ -35,18 +27,23 @@ class Recommendation:
                 raise ValueError(f"Dữ liệu thiếu cột '{col}'.")
 
         # Làm sạch dữ liệu
-        data_clean = self.clean_columns(data, ['Course Name', 'Course Description', 'Skills'])
+        data_clean = self._clean_columns(data, ['Course Name', 'Course Description', 'Skills'])
 
         # Kết hợp các cột tạo thành `tags`
         data_clean['tags'] = (
-            data_clean['Course Name'] + " " +
-            data_clean['Difficulty Level'] + " " +
             data_clean['Course Description'] + " " +
             data_clean['Skills']
         ).str.lower()
 
         # Lựa chọn các cột cần thiết
-        new_data = data_clean[['Course Name', 'tags']].rename(columns={'Course Name': 'course_name'})
+        new_data = data_clean.rename(columns={
+            'Course Name': 'course_name',
+            'Skills': 'skills',
+            'Course Description': 'description',
+            'University': 'university',
+            'Difficulty Level': 'difficulty',
+            
+        })
 
         # Giữ dấu cách giữa các từ trong `course_name`
         new_data['course_name'] = new_data['course_name'].str.strip()
@@ -118,56 +115,29 @@ class Recommendation:
 
         return recommendations
 
+    def _score_semantic(self, course_ids: list, data: dict) -> list[float]:
+        historical_data = []
+        for course_id in course_ids:
+            historical_data.append(data)
 
-    def recommend_with_rating(self, courses, data, number_course_recommend=6, rating_weight=0.5):
+    def _score_wordbase_view(self, course_ids: list, data: dict) -> list[float]:
+        pass
+
+    def _score_wordbase_search(self, query: str, data: dict) -> list[float]:
+        pass
+
+    def _score_levenshtein(self, query: str, data: dict) -> list[float]:
+        pass
+
+    def _calculate_final_score(self, semantic_scores: list, wordbase_scores: list, levenshtein_scores: list):
+        pass
+
+    def recommend_with_rating(self, courses, data, number_course_recommend=6):
+        """Recommend k courses with the historical data
+
+        Args:
+            courses (list): list of courses' name or infor
+            data (dict): dictionary containing all data about courses
+            number_course_recommend (int, optional): number of recommended courses. Defaults to 6.
         """
-        Đề xuất khóa học dựa trên cột 'rating' và 'cosine_similarity'.
-
-        Parameters:
-            courses: Danh sách tên các khóa học đã chọn.
-            data: DataFrame chứa thông tin khóa học (phải có 'course_name', 'tags', và 'rating').
-            number_course_recommend: Số lượng khóa học gợi ý (mặc định 6).
-            rating_weight: Trọng số để ưu tiên cột rating (0 đến 1).
         
-        Returns:
-            Danh sách tên các khóa học được đề xuất.
-        """
-        # Kiểm tra các cột cần thiết
-        required_columns = {'course_name', 'tags', 'rating'}
-        if not required_columns.issubset(data.columns):
-            raise ValueError(f"Dữ liệu đầu vào thiếu một trong các cột: {required_columns}")
-
-        # Tính ma trận tương đồng
-        similarity = self.similarity_measure(data)
-
-        # Lấy chỉ số các khóa học đầu vào
-        course_indices = [
-            data[data['course_name'] == course].index[0] 
-            for course in courses if course in data['course_name'].values
-        ]
-        if not course_indices:
-            raise ValueError("Không có khóa học nào hợp lệ trong danh sách đầu vào.")
-
-        # Tính tổng điểm tương đồng
-        combined_distances = np.mean([similarity[idx] for idx in course_indices], axis=0)
-
-        # Chuẩn hóa điểm rating
-        data['rating_normalized'] = (data['rating'] - data['rating'].min()) / (data['rating'].max() - data['rating'].min())
-
-        # Tạo điểm tổng hợp với rating
-        combined_scores = (1 - rating_weight) * combined_distances + rating_weight * data['rating_normalized']
-
-        # Sắp xếp khóa học dựa trên điểm tổng hợp
-        recommended_courses = sorted(
-            enumerate(combined_scores),
-            key=lambda x: x[1],
-            reverse=True
-        )
-
-        # Loại bỏ các khóa học đã chọn
-        recommended_courses = [
-            data.iloc[i[0]].course_name for i in recommended_courses 
-            if i[0] not in course_indices
-        ][:number_course_recommend]
-
-        return recommended_courses
