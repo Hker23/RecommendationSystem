@@ -2,18 +2,18 @@ from flask import Flask, render_template, url_for,request, jsonify, session,redi
 from pymongo import MongoClient
 import sys
 import os
+from dotenv import load_dotenv
 from datetime import datetime
-# Thêm thư mục gốc vào sys.path để Python có thể tìm thấy thư mục model
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from model.RecommendationSystem import Recommendation
 import pandas as pd
+load_dotenv()
 app = Flask(__name__)
-recommendation = Recommendation()
-df = pd.read_csv("model\Coursera.csv")
-data = recommendation.pre_processing(df)
+df = pd.read_csv("model\\clean.csv")
+recommendation = Recommendation(df)
 data['tags'] = data['tags'].apply(recommendation.stem)
-uri = "mongodb+srv://tnchau23823:abc13579@cluster0.fs6jd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-client = MongoClient(uri)
+MONGODB_URI = os.getenv("MONGODB_URI")
+client = MongoClient(MONGODB_URI)
 
 app.secret_key = 'key'  # Required for session management
 db = client['my_database']
