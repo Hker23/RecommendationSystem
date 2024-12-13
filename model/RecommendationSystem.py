@@ -23,7 +23,7 @@ class Recommendation:
         """
         for column in columns:
             if column in data.columns:
-                self.data[column] = self.data[column].str.replace(r"[,:_()]", "", regex=True)
+                data[column] = data[column].str.replace(r"[,:_()]", "", regex=True)
         return data
 
     def _preprocess_data(self, data):
@@ -75,7 +75,7 @@ class Recommendation:
 
         return cosine_similarity(vectors)
 
-    def user_search(self, user_input, data, number_course_recommend=6):
+    def user_search(self, user_input, number_course_recommend=6):
         """
         Gợi ý các khóa học dựa trên input từ người dùng và dữ liệu khóa học.
 
@@ -88,39 +88,24 @@ class Recommendation:
             list: Danh sách từ điển chứa tên, mô tả, URL khóa học.
         """
         # Kiểm tra cột cần thiết
-        if 'tags' not in data.columns or 'course_name' not in data.columns:
+        if 'tags' not in self.data.columns or 'course_name' not in self.data.columns:
             raise ValueError("Dữ liệu cần có các cột 'tags' và 'course_name'.")
-
-        # Chuẩn bị dữ liệu
-        data = data.copy()
+        data = self.data.copy()
         data['tags'] = data['tags'].str.lower()
 
-        # Thêm input từ người dùng vào dataset để tính toán
         data = pd.concat([data, pd.DataFrame({'tags': [user_input.lower()], 'course_name': ['User Input']})], ignore_index=True)
-
-        # Vector hóa văn bản
         cv = CountVectorizer(max_features=5000, stop_words='english')
         vectors = cv.fit_transform(data['tags']).toarray()
-        
-        # Tính độ tương đồng cosine
         similarity = cosine_similarity(vectors)
 
-        # Lấy chỉ số của user input
         user_index = data[data['course_name'] == 'User Input'].index[0]
-
-        # Lấy danh sách các khóa học tương tự
         distances = similarity[user_index]
         recommended_indices = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:number_course_recommend + 1]
 
-        # Trả về thông tin khóa học được gợi ý
         recommendations = []
         for idx, _ in recommended_indices:
-            course = data.iloc[idx]
-            # print(course)
+            course = self.data.iloc[idx]
             recommendations.append(course['course_name'])
-                # 'description': course.get('description', 'No description available'),
-                # 'url': course.get('url', '#')  # URL khóa học (nếu có)
-            # })
 
         return recommendations
 

@@ -85,7 +85,7 @@ class QdrantService:
         logger.info(f"Collection '{collection_name}' deleted.")
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # qdrant = QdrantService()
     # data = pd.read_csv("model/clean.csv")
     # cv = CountVectorizer(max_features=5000, stop_words='english')

@@ -2,15 +2,18 @@ from flask import Flask, render_template, url_for,request, jsonify, session,redi
 from pymongo import MongoClient
 import sys
 import os
+import random
 from dotenv import load_dotenv
 from datetime import datetime
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from model.RecommendationSystem import Recommendation
+from model.recsys_service import RecommendationService
 import pandas as pd
 load_dotenv()
 app = Flask(__name__)
-df = pd.read_csv("model\\clean.csv")
-recommendation = Recommendation(df)
+data = pd.read_csv("model\\clean.csv")
+recommendation = Recommendation(data)
+rcm_sv = RecommendationService(data)
 data['tags'] = data['tags'].apply(recommendation.stem)
 MONGODB_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGODB_URI)
@@ -23,7 +26,35 @@ searchs = db['search']
 views = db['view']
 @app.route('/')
 def home():
-    return render_template("home.html")
+    if 'username' not in session:
+        all_courses = list(db_courses.find())
+        num_courses = 6
+        selected_courses = random.sample(all_courses, num_courses)
+        
+        # Tạo danh sách kết quả với cấu trúc mong muốn
+        course_list = []
+        for course in selected_courses:
+            course_list.append({
+                "name": course["Course Name"],
+                "url": url_for('view_course', course_id=course["Course ID"], _external=True),
+                "course_id": course["Course ID"]
+            })
+        # print("0",course_list)
+    else:
+        username =  session['username']
+        course_list_id = rcm_sv.recommend_with_rating(username,6)
+        print(course_list_id)
+        course_list = []
+        for course_id in course_list_id:
+            course = db_courses.find_one({"Course ID": course_id})        
+            if course:
+                course_list.append({
+                    "name": course["Course Name"],
+                    "url": url_for('view_course', course_id=course["Course ID"]),
+                    "course_id": course["Course ID"]
+                })
+        print(course_list)
+    return render_template("home.html", courses = course_list)
 
 
 @app.route('/login', methods = ['POST','GET'])
@@ -86,7 +117,7 @@ def explore():
     if 'username' in session:
         username =  session['username']
         searchs.insert_one({'query': user_input, 'username' : username, 'time_query': datetime.now()})
-    recommendations = recommendation.user_search(user_input, data)
+    recommendations = recommendation.user_search(user_input)
     course_list = []
     for course_name in recommendations:
         # Tìm khóa học trong MongoDB theo tên

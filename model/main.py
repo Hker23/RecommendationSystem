@@ -8,6 +8,8 @@ from pymongo import MongoClient
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from recsys_service import RecommendationService
+
 load_dotenv()
 MONGODB_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGODB_URI)
@@ -15,32 +17,35 @@ db = client['my_database']
 db_courses = db['db_courses']
 Course_ID = "6b645dfc-128d-426a-b6c5-138cffb36c62"
 data = pd.read_csv("Coursera.csv")
-def score_wordbase_view(course_id, data):
-    # Tìm khóa học trong cơ sở dữ liệu
-    document = db_courses.find_one({'Course ID': course_id})
-    if not document:
-        raise ValueError(f"Course with ID {course_id} not found")
+rcmsv = RecommendationService(data)
 
-    # Mô tả khóa học cần so sánh
-    course_description = document["Course Description"]
+print(rcmsv.recommend_with_rating("chau",6))
+# def score_wordbase_view(course_id, data):
+#     # Tìm khóa học trong cơ sở dữ liệu
+#     document = db_courses.find_one({'Course ID': course_id})
+#     if not document:
+#         raise ValueError(f"Course with ID {course_id} not found")
 
-    # Tất cả mô tả khóa học
-    course_descriptions = data['Course Description']
+#     # Mô tả khóa học cần so sánh
+#     course_description = document["Course Description"]
 
-    #Vectorizer
-    cv = CountVectorizer(max_features=5000, stop_words='english')
-    vectors = cv.fit_transform(course_descriptions)
+#     # Tất cả mô tả khóa học
+#     course_descriptions = data['Course Description']
 
-    # Tính vector cho khóa học cần so sánh
-    query_vector = cv.transform([course_description])
+#     #Vectorizer
+#     cv = CountVectorizer(max_features=5000, stop_words='english')
+#     vectors = cv.fit_transform(course_descriptions)
 
-    # Tính tương đồng cosine
-    similarity_scores = cosine_similarity(query_vector, vectors)
+#     # Tính vector cho khóa học cần so sánh
+#     query_vector = cv.transform([course_description])
 
-    # Trả về điểm tương đồng
-    return similarity_scores.flatten()
+#     # Tính tương đồng cosine
+#     similarity_scores = cosine_similarity(query_vector, vectors)
 
-similarity_scores = score_wordbase_view(Course_ID, data)
+#     # Trả về điểm tương đồng
+#     return similarity_scores.flatten()
+
+# similarity_scores = score_wordbase_view(Course_ID, data)
 
 
 
@@ -91,7 +96,7 @@ similarity_scores = score_wordbase_view(Course_ID, data)
 #     {"id": 2, "name": "Data Science", "description": "Introduction to data analysis and machine learning."},
 #     {"id": 3, "name": "Web Development", "description": "Build modern websites with HTML, CSS, and JavaScript."},
 # ]
-courses = pd.read_csv("model\\Coursera.csv")
+# courses = pd.read_csv("model\\Coursera.csv")
 
 # print(document["Course Description"])
 # # Hàm để tính score dựa trên description
@@ -172,9 +177,9 @@ courses = pd.read_csv("model\\Coursera.csv")
 # user_query = "Learn programming and data analysis"
 # recommended = recommend_courses(user_query, courses)
 
-temp = set()
-courses.drop_duplicates(subset='Course URL', inplace=True)
-courses.to_csv("model\\clean.csv", index=False)
+# temp = set()
+# courses.drop_duplicates(subset='Course URL', inplace=True)
+# courses.to_csv("model\\clean.csv", index=False)
 # print("Recommended Courses:")
 # print(recommended)
     # print(f"- {course['Course Name']}: {course['Course Description']}")

@@ -255,3 +255,11 @@ body::before {
   opacity: 1;
   pointer-events: all;
 }
+.logo {
+  display: block; /* Hoặc inline-block, tùy thuộc vào yêu cầu */
+  text-decoration: none; /* Loại bỏ gạch chân của liên kết */
+  color: inherit; /* Giữ nguyên màu chữ */
+  font-size: 1.5rem; /* Tùy chỉnh kích thước chữ */
+  font-weight: bold; /* Tùy chỉnh kiểu chữ */
+}
+

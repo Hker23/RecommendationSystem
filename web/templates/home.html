@@ -11,7 +11,7 @@
 <body>
   <header>
     <nav class="navbar">
-      <div class="logo">MyWebsite</div>
+      <a class="logo" href="/">MyWebsite</a>
       <div class="menu">
         <div class="dropdown">
           <form action="/explore" method="POST" id="explore-form">
@@ -62,8 +62,8 @@
         <div id="profile-circle" class="profile-circle">H</div>
         <div id="dropdown-menu" class="dropdown-menu">
           <ul>
-            <li><a id="login" href="/login">Đăng nhập</a></li>
-            <li><a id="logout" href="/logout">Đăng xuất</a></li>
+            <li><a id="login" href="/login">Login</a></li>
+            <li><a id="logout" href="/logout">Logout</a></li>
           </ul>
         </div>
       </div>
@@ -71,13 +71,35 @@
   </header>
 
   <main>
-    <section class="banner">
+    <!-- <section class="banner">
       <div class="banner-content">
         <h1>Black Friday Sale</h1>
         <p>Save big on learning with special deals starting at $199.</p>
       </div>
+    </section> -->
+    <section class="recommended-courses">
+      <h2>Recommended Courses For You</h2>
+      <p>Explore the courses recommended for you based on your interests.</p>
+      <div class="course-grid">
+        {% if courses %}
+          {% for course in courses %}
+            <div class="course-card">
+            <div>
+              <a href="{{ course.url }}" 
+                target="_blank" >
+                 <!-- onclick="logCourseClick('{{ course.course_id }}', '{{ course.url }}')" > -->
+                <img src="static/image/1.png" alt="{{ course.name }}">
+                <h3>{{ course.name }}</h3>
+                <p>{{ course.description }}</p>
+              </a>
+            </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No courses found based on your query. Please try again.</p>
+        {% endif %}
+      </div>
     </section>
-
     <section class="popular-courses">
       <h2>Most Popular Certificates</h2>
       <p>Explore our most popular programs and get job-ready for in-demand careers.</p>

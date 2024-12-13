@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
     // Lấy các phần tử
     const profileCircle = document.getElementById('profile-circle');
     const dropdownMenu = document.getElementById('dropdown-menu');

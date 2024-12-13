@@ -7,22 +7,23 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 # from nltk.stem.porter import PorterStemmer
 from pymongo import MongoClient
-from levenshtein_service import LevenshteinService
-from qdrant_service import QdrantService
+from model.levenshtein_service import LevenshteinService
+from model.qdrant_service import QdrantService
 load_dotenv()
 MONGODB_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGODB_URI)
 db = client['my_database']
 db_courses = db['db_courses']
-
+searchs = db['search']
+views = db['view']
 class RecommendationService():
     def __init__(self, data: dict):
         self.data = self._preprocess_data(data)
         self.vectorizer = CountVectorizer(max_features=5000, stop_words='english')
         self.data_vectors = self.vectorizer.fit_transform(self.data['tags'])
         self.levenshtein = LevenshteinService()
-        self.semantic_model = SentenceTransformer(os.getenv("MODEL_PATH"))
-        self.qdrant = QdrantService()
+        # self.semantic_model = SentenceTransformer(os.getenv("MODEL_PATH"))
+        # self.qdrant = QdrantService()
 
     def _clean_columns(self, data, columns):
         """
@@ -30,7 +31,7 @@ class RecommendationService():
         """
         for column in columns:
             if column in data.columns:
-                self.data[column] = self.data[column].str.replace(r"[,:_()]", "", regex=True)
+                data[column] = data[column].str.replace(r"[,:_()]", "", regex=True)
         return data
 
     def _preprocess_data(self, data):
@@ -115,4 +116,28 @@ class RecommendationService():
             username (str): username
             number_course_recommend (int, optional): number of recommended courses. Defaults to 6.
         """
-        pass
+        document_views = views.find({'username':username})
+        document_searchs = searchs.find({'username':username})
+        course_ids =[]
+        queries = []
+        for document in document_views:
+            course_ids.append(document['course_id'])
+        for document in document_searchs:
+            queries.append(document['query'])
+        # score_wordbase = self._calculate_final_score(self._score_wordbase_search(queries),self._score_wordbase_view(course_ids))
+        final_score = self._calculate_final_score(course_ids,queries)
+        if isinstance(final_score, np.ndarray):
+            sorted_courses = sorted(
+                zip(final_score, course_ids),
+                key=lambda x: x[0],  # Sắp xếp theo điểm số
+                reverse=True
+            )
+        else:
+            raise ValueError("Unexpected type for final_score. Expected numpy.ndarray.")
+
+        # Lấy top k khóa học tương đồng nhất
+        top_courses = [course for _, course in sorted_courses[:number_course_recommend]]
+
+        return top_courses
+    
+
